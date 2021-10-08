@@ -3,7 +3,7 @@ window.addEventListener('DOMContentLoaded', () =>{
 	const board = document.getElementById("board");
 	const actualBoard = board.getElementsByTagName("div");
   	let x= "X";
-  	const stat=document.querySelectorAll('#status');
+  	const stat=document.querySelector('#status');
   	const btnButton=document.getElementsByClassName("btn")[0];
   	const rules=[[0,4,8],[0,3,6],[0,1,2],[3,4,5],[6,7,8],[1,4,7],[2,5,8],[2,4,6]];
   	let selected;
@@ -18,6 +18,7 @@ window.addEventListener('DOMContentLoaded', () =>{
 	let index2;
 	let square;
 	var d;
+	const disp;
 
 	function newboard() {
 		arr= ["", "", "", "", "", "", "", "", ""];
@@ -30,6 +31,10 @@ window.addEventListener('DOMContentLoaded', () =>{
 				actualBoard[d].addEventListener("mousemover", mouse);
 			}	  
 	}
+	function mousemover(){
+		document.getElementsByClassName("square").setAttribute("class", "hover");
+	}
+
 
 
 	function sq(square) {
@@ -52,13 +57,19 @@ window.addEventListener('DOMContentLoaded', () =>{
 
 	function move() {
 		x = x === "X" ? "O" : "X";
-		stat.innerHTML = x();
+		disp.innerHTML = x();
 
 	}
 
 
+	function resetBoard() {
+		disp.innerHTML = x();
+		newboard();
+		activeGame = true;
 
+	}
+	
 
-	newBoard();
+	newboard();
 	btnButton.addEventListener('click', resetBoard);
 });
