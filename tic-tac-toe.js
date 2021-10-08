@@ -1,7 +1,7 @@
 window.addEventListener('DOMContentLoaded', () =>{
 	/** Lab3 for Claude Manning **/
-	const board = document.querySelectorAll("board");
-	const actualBoard = document.getElementById("board").children;
+	const board = document.getElementById("board");
+	const actualBoard = board.getElementsByTagName("div");
   	let x= "X";
   	const stat=document.querySelectorAll('#status');
   	const btnButton=document.getElementsByClassName("btn")[0];
@@ -17,6 +17,20 @@ window.addEventListener('DOMContentLoaded', () =>{
 	let sqaureselect;
 	let index2;
 	let square;
+	var d;
+
+	function newboard() {
+		arr= ["", "", "", "", "", "", "", "", ""];
+
+			for(d=0; d<board.length; d++) {
+				actualBoard[d].innerHTML = "";
+				actualBoard[d].setAttribute("cellindex", d);
+				actualBoard[d].setAttribute("class", "square");
+				actualBoard[d].addEventListener('click', clicksquare);
+				actualBoard[d].addEventListener("mousemover", mouse);
+			}	  
+	}
+
 
 	function sq(square) {
 		 clicksquare = square.target;
@@ -45,5 +59,6 @@ window.addEventListener('DOMContentLoaded', () =>{
 
 
 
+	newBoard();
 	btnButton.addEventListener('click', resetBoard);
 });
