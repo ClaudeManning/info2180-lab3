@@ -9,11 +9,38 @@ window.addEventListener('DOMContentLoaded', () =>{
   	let selected;
   	let nexxt=true;
 	let arr=["","","","","","","","",""];
-
+	const clicksquare;
+	const index;
 	const gamewon= () => 'Congratulations ${x} is the winner ';
 	const gamedraw = () => 'None of you won';
 	const xplay = () => '${x} please play';
+	let sqaureselect;
+	let index2;
+	let square;
+
+	function sq(square) {
+		 clicksquare = square.target;
+		 index= parseInt(clicksquare.getAttribute('cellindex'));
+		
+		if (arr[index] !== "" || !nexxt) {
+        return;
+		}
+		inserted(clicksquare, index);
+		current();
+	}
+
+	function insereted(sqaureselect, index2) {
+		 arr[index] = x;
+		 squareselect.innerHTML= x;
+
+	}
 	
+
+	function move() {
+		x = x === "X" ? "O" : "X";
+		stat.innerHTML = x();
+
+	}
 
 
 
