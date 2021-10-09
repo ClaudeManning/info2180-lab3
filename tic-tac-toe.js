@@ -1,6 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
-	
-	const winnings = [
+    
+    const displayStatus = document.querySelector('#status');
+    let activeGame = true;
+    let currentPlayer = "X";
+    let gameState = ["", "", "", "", "", "", "", "", ""];
+    const winner = () => `Congratulations! ${currentPlayer} is the winner`;
+    const currentPlayerTurn = () => ` It's ${currentPlayer}'s turn to play!`;
+    
+    const winningConditions = [
     [0, 1, 2],
     [3, 4, 5],
     [6, 7, 8],
@@ -10,95 +17,94 @@ document.addEventListener('DOMContentLoaded', () => {
     [0, 4, 8],
     [2, 4, 6]
 ];
-	let x1 = "X";
-	let arr1 = ["", "", "", "", "", "", "", "", ""];
-	const winner = () => `Congratulations! ${x1} is the winner`;
-	const turn = () => ` Play ${x}`;
-	const stat = document.querySelector('#status');
-	let active = true;
 
-	function sq(square1) {
-		const clicksquare = square1.target;
-		const index1 = parseInt(clickesquare.getAttribute('data-cell-index'));
-		
-		if (arr1[index1] !== "" || !active) {
+    function ClickedSquare(square_is_clicked) {
+        const clicked_square = square_is_clicked.target;
+        const index_of_square = parseInt(clicked_square.getAttribute('data-cell-index'));
+        
+        if (gameState[index_of_square] !== "" || !activeGame) {
         return;
-		}
-		opt(clicksquare, index1);
-		decider();
-	}
+        }
+        Played(clicked_square, index_of_square);
+        GameResults();
+    }
+    
+    function Played(squareClicked, squareIndex) {
+        gameState[squareIndex] = currentPlayer;
+        squareClicked.innerHTML = currentPlayer;
 
+    }
+    
+    function NextPlayer() {
+        currentPlayer = currentPlayer === "X" ? "O" : "X";
+        displayStatus.innerHTML = currentPlayerTurn();
 
-	
-	function opt(sqselected, sqnum) {
-		arr1[sqnum] = x1;
-		sqselected.innerHTML = x1;
-
-	}
-	
-	function move() {
-		x1 = x1 === "X" ? "O" : "X";
-		stat.innerHTML = turn();
-
-	}
-	
-	function decider() {
-		let ifWon = false;
-		for (var i = 0; i <= 7; i++) {
-        const condition = winnings[i];
-        let a = arr1[condition[0]];
-        let b = arr1[condition[1]];
-        let c = arr1[condition[2]];
+    }
+    
+    function GameResults() {
+        let roundWon = false;
+        for (var i = 0; i <= 7; i++) {
+        const winCondition = winningConditions[i];
+        let a = gameState[winCondition[0]];
+        let b = gameState[winCondition[1]];
+        let c = gameState[winCondition[2]];
         if (a === '' || b === '' || c === '') {
             continue;
         }
         if (a === b && b === c) {
-            ifWon = true;
+            roundWon = true;
             break
-			}
-		}
-		if (ifWon) {
-			stat.innerHTML = winner();
-			active= false;
-			return;
-		}
-		
+            }
+        }
+        if (roundWon) {
+            displayStatus.innerHTML = winner();
+            activeGame = false;
+            return;
+        }
 
-	   move();
+       NextPlayer();
 
-	}
-	
-
-		
-	function NewGame() {
-		stat.innerHTML = turn();
-		newBoard();
-		active = true;
-
-	}
-	
-	function hovering(){
-		document.getElementsByClassName("square").setAttribute("class", "hover");
-	}
-	
+    }
+    
+    
+    function hoverStyle(event){
+        event.target.classList.add('hover');
+    
+    } 
+    function hoverRevert(event){
+   
+        event.target.classList.remove('hover');
+     }  
 
 
-	
-	function newBoard() {
-		arr1 = ["", "", "", "", "", "", "", "", ""];
-		let boardcreate = document.getElementById("board");
-		let boarddiv = boardcreate.getElementsByTagName("div");
-			for(var d=0; d<boarddiv.length; d++) {
-				boarddiv[d].innerHTML = "";
-				boarddiv[d].setAttribute("data-cell-index", d);
-				boarddiv[d].setAttribute("class", "square");
-				boarddiv[d].addEventListener('click', sq);
-				boarddiv[d].addEventListener("mouseover", hovering);
-			}	  
-	}
+    function NewGame() {
+        displayStatus.innerHTML = currentPlayerTurn();
+        addBoard();
+        activeGame = true;
 
-	newBoard();
-	document.querySelector('.btn').addEventListener('click', NewGame);
-	
-	
+    }
+    
+    
+    function mouseOver(){
+        document.getElementsByClassName("square").setAttribute("class", "hover");
+    }
+    
+    function addBoard() {
+        gameState = ["", "", "", "", "", "", "", "", ""];
+        let boarddiv = document.getElementById("board");
+        let boardindiv = boarddiv.getElementsByTagName("div");
+            for(var d=0; d<boardindiv.length; d++) {
+                boardindiv[d].innerHTML = "";
+                boardindiv[d].setAttribute("data-cell-index", d);
+                boardindiv[d].setAttribute("class", "square");
+                boardindiv[d].addEventListener('click', ClickedSquare);
+                boardindiv[d].addEventListener("onmouseover", mouseOver);
+                boardindiv[d].addEventListener('mouseenter',hoverStyle);
+                boardindiv[d].addEventListener('mouseleave',hoverRevert);
+            }     
+    }
+    addBoard();
+    document.querySelector('.btn').addEventListener('click', NewGame);
+    
+    
  });
